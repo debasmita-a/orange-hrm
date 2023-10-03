@@ -11,6 +11,8 @@ public class DashboardPage {
 	private ElementUtil util;
 
 	private By welcome = By.id("welcome");
+	private By pim = By.id("menu_pim_viewPimModule");
+	private By addEmployee = By.id("menu_pim_addEmployee");
 	
 	public DashboardPage(WebDriver driver) {
 		this.driver = driver;
@@ -19,6 +21,12 @@ public class DashboardPage {
 	
 	public String getWelcomeText() {
 		return util.doGetText(welcome);
+	}
+	
+	public AddEmployeePage navigateToAddEmployee() {
+		util.getElement(pim);
+		util.doClick(addEmployee);
+		return new AddEmployeePage(driver);
 	}
 	
 }
