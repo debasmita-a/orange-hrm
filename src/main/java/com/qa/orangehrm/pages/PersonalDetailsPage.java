@@ -15,7 +15,7 @@ public class PersonalDetailsPage {
 	private By saveProfileBtn = By.xpath("//input[@id='btnSave' and @value='Save']");
 	
 	public PersonalDetailsPage(WebDriver driver) {
-		driver = this.driver;
+		this.driver = driver;
 		util = new ElementUtil(driver);
 	}
 	

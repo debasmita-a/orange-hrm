@@ -17,7 +17,7 @@ public class AddEmployeePage {
 	private By saveBtn = By.id("btnSave");
 	
 	public AddEmployeePage(WebDriver driver) {
-		driver = this.driver;
+		this.driver = driver;
 		util = new ElementUtil(driver);
 	}
 	
