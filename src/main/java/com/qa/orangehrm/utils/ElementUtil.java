@@ -65,4 +65,8 @@ public class ElementUtil {
 		Alert alert = driver.switchTo().alert();
 		return alert.getText();	
 	}
+	
+	public void moveToWindow(String windowID) {
+		driver.switchTo().window(windowID);
+	}
 }

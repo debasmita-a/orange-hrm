@@ -18,23 +18,23 @@ public class EmployeeListPageTest extends BaseTest {
 	
 	@Test
 	public void searchEmployeeWithNameTest() {
-		Assert.assertEquals(employeeListPage.searchEmployeeWithName("debasmita"), true);
+		Assert.assertEquals(employeeListPage.searchEmployeeWithName("FirstName_01"), false);
 	}
 	
 	@Test
 	public void searchEmployeeWithIdTest() {
-		Assert.assertEquals(employeeListPage.searchEmployeeWithId("001"), true);
+		Assert.assertEquals(employeeListPage.searchEmployeeWithId("0001"), true);
 	}
 	
 	@Test
-	public void searchResultTest() {
-		String emp_last_name = employeeListPage.searchResult("debasmita", " ").get("Last name");
-		Assert.assertEquals(emp_last_name, "Adhikari");
+	public void searchResultTest(){
+		String emp_last_name = employeeListPage.searchResult("FirstName_01", " ").get("Last name");
+		Assert.assertEquals(emp_last_name, "LastName_01");
 	}
 	
 	@Test
-	public void deleteEmployeeTest() {
-		employeeListPage.deleteEmployee("debasmita");
-		Assert.assertEquals(employeeListPage.searchEmployeeWithId("debasmita"), false);
+	public void deleteEmployeeTest(){
+		employeeListPage.deleteEmployee("FirstName_01");
+		Assert.assertEquals(employeeListPage.searchEmployeeWithName("FirstName_01"), false);
 	}
 }

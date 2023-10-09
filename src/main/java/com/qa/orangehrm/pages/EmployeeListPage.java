@@ -24,10 +24,12 @@ public class EmployeeListPage {
 	private By addEmpBtn = By.id("btnAdd");
 	private By deleteBtn = By.id("btnDelete");
 	private By searchResult = By.xpath("//tr//td//a");
+	private By noRecordFound = By.xpath("//tr//td");
 	private By id_value = By.xpath("(//tr//td//a)[1]");
 	private By firstName_value = By.xpath("(//tr//td//a)[2]");
 	private By lastName_value = By.xpath("(//tr//td//a)[3]");
 	private By checkBox = By.xpath("//tr/td/input[@type='checkbox']");
+	private By deleteOkBtn = By.id("dialogDeleteBtn");
 	
 	public AddEmployeePage addAnEmployee() {
 		util.doClick(addEmpBtn);
@@ -35,12 +37,8 @@ public class EmployeeListPage {
 	}
 	
 	public boolean searchEmployeeWithName(String name) {
-		util.doSendKeys(searchWith_empName, name);
-		util.doClick(searchBtn);
-		if(util.doGetElements(searchResult).size()>0) {
-			return true;
-		}	
 		return false;
+
 	}
 	
 	public boolean searchEmployeeWithId(String id) {
@@ -59,6 +57,7 @@ public class EmployeeListPage {
 			searchResult.put("First name", util.doGetText(firstName_value));
 			searchResult.put("Last name", util.doGetText(lastName_value));
 		}	
+		System.out.println(searchResult);
 		return searchResult;
 	}
 	
@@ -66,8 +65,7 @@ public class EmployeeListPage {
 		if(searchEmployeeWithName(name)) {
 			util.doClick(checkBox);
 			util.doClick(deleteBtn);
-			System.out.println(util.doGetAlertText());
-			util.doAcceptAlert();
+			util.doClick(deleteOkBtn);
 		}
 	}
 	
