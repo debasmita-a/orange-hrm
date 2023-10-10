@@ -31,6 +31,13 @@ public class EmployeeListPage {
 	private By lastName_value = By.xpath("(//tr//td//a)[3]");
 	private By checkBox = By.xpath("//tr/td/input[@type='checkbox']");
 	private By deleteOkBtn = By.id("dialogDeleteBtn");
+	private By profileName = By.xpath("//div[@id='profile-pic']/h1");
+	private By editProfileBtn = By.xpath("//input[@id='btnSave' and @value='Edit']");
+	private By saveProfileBtn = By.xpath("//input[@id='btnSave' and @value='Save']");
+	private By gender_male_radioBtn = By.xpath("//input[@value='1']");
+	private By gender_female_radioBtn = By.xpath("//input[@value='2']");
+	private By select_nationality = By.id("personal_cmbNation");
+	private By disabledFields = By.xpath("//input[@disabled='disabled']");
 	
 	public AddEmployeePage addAnEmployee() {
 		util.doClick(addEmpBtn);
@@ -47,9 +54,8 @@ public class EmployeeListPage {
 		return false;
 	}
 	
-	public boolean searchWhenEmployeeNotAvailable(String name) throws InterruptedException {
+	public boolean searchWhenEmployeeNotAvailable(String name){
 		util.doActionsSendkeys(searchWith_empName, name);
-		Thread.sleep(4000);
 		util.doActionsClick(searchBtn);
 		if(util.doGetText(noRecordFound).equals(FrameworkConstants.NO_RECORDS_FOUND)) {
 			System.out.println("Employee not available in database."+name);
@@ -58,14 +64,14 @@ public class EmployeeListPage {
 		return false;
 	}
 
-	public String searchAnEmployee(String name) {
+	public String searchResult(String name) {
 		if(searchEmployeeWithName(name)) {
 			System.out.println("Employee id is :: "+util.doGetText(id_value));
 		}
 		return util.doGetText(id_value);
 	}
 	
-	public boolean deleteAnEmployee(String name) throws InterruptedException {
+	public boolean deleteAnEmployee(String name){
 		if(searchEmployeeWithName(name)) {
 			util.doClick(checkBox);
 			util.doClick(deleteBtn);
@@ -74,10 +80,19 @@ public class EmployeeListPage {
 		}
 		return searchWhenEmployeeNotAvailable(name);
 	}
-
-	public PersonalDetailsPage navigateToPersonalDetailsPage() {
+	
+	public boolean editEmployeeProfile(String name) {
+		searchEmployeeWithName(name);
 		util.doClick(firstName_value);
-		return new PersonalDetailsPage(driver);
+		util.doClick(editProfileBtn);
+		util.doActionsClick(gender_female_radioBtn);
+		util.selectByVisibleText(select_nationality, "Algerian");
+		util.doClick(saveProfileBtn);
+		if(util.doGetElements(disabledFields).size()>0) {
+			System.out.println("Updated employee data..");
+			return true;
+		}
+		return false;
 	}
 	
 }

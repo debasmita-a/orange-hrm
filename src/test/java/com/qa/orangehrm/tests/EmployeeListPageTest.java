@@ -17,22 +17,27 @@ public class EmployeeListPageTest extends BaseTest {
 	}
 
 	@Test
-	public void searchEmployeeWithNameTest() throws InterruptedException {
+	public void searchEmployeeWithNameTest(){
 		Assert.assertTrue(employeeListPage.searchEmployeeWithName("joey"));
 	}
 	
 	@Test
-	public void searchWhenEmployeeNotAvailableTest() throws InterruptedException {
+	public void searchWhenEmployeeNotAvailableTest(){
 		Assert.assertTrue(employeeListPage.searchWhenEmployeeNotAvailable("test01"));
 	}
 	
 	@Test
 	public void searchResultTest(){
-		Assert.assertEquals(employeeListPage.searchAnEmployee("debasmita"),"0001");
+		Assert.assertEquals(employeeListPage.searchResult("debasmita"),"0001");
 	}
 	
 	@Test
-	public void deleteEmployeeTest() throws InterruptedException{
+	public void deleteEmployeeTest(){
 		Assert.assertTrue(employeeListPage.deleteAnEmployee("test01"));
+	}
+	
+	@Test
+	public void editEmployeeProfileTest() {
+		Assert.assertTrue(employeeListPage.editEmployeeProfile("debasmita"));
 	}
 }
