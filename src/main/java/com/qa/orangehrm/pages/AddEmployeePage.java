@@ -21,10 +21,9 @@ public class AddEmployeePage {
 		util = new ElementUtil(driver);
 	}
 	
-	public PersonalDetailsPage addAnEmployee(String fname, String lanme, String id) {
+	public PersonalDetailsPage addAnEmployee(String fname, String lanme) {
 		util.doSendKeys(firstname, fname);
 		util.doSendKeys(lastname, lanme);
-		util.doSendKeys(empID, id);
 		util.doClick(saveBtn);
 		return new PersonalDetailsPage(driver);
 	}

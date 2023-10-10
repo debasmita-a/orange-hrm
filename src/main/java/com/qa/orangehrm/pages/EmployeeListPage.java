@@ -6,6 +6,7 @@ import java.util.Map;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import com.qa.orangehrm.constants.FrameworkConstants;
 import com.qa.orangehrm.utils.ElementUtil;
 
 public class EmployeeListPage {
@@ -36,37 +37,47 @@ public class EmployeeListPage {
 		return new AddEmployeePage(driver);
 	}
 	
-	public boolean searchEmployeeWithName(String name) {
+	public boolean searchEmployeeWithName(String name){
+		util.doActionsSendkeys(searchWith_empName, name);
+		util.doActionsClick(searchBtn);
+		if(util.doGetText(firstName_value).equalsIgnoreCase(name)) {
+			System.out.println(util.doGetText(firstName_value));
+			return true;
+		}
 		return false;
-
 	}
 	
-	public boolean searchEmployeeWithId(String id) {
-		util.doSendKeys(searchWith_id, id);
-		util.doClick(searchBtn);
-		if(util.doGetElements(searchResult).size()>0) {
+	public boolean searchWhenEmployeeNotAvailable(String name) throws InterruptedException {
+		util.doActionsSendkeys(searchWith_empName, name);
+		Thread.sleep(4000);
+		util.doActionsClick(searchBtn);
+		if(util.doGetText(noRecordFound).equals(FrameworkConstants.NO_RECORDS_FOUND)) {
+			System.out.println("Employee not available in database."+name);
 			return true;
 		}	
 		return false;
 	}
-	
-	public Map<String, String> searchResult(String name, String id) {
-		Map<String, String> searchResult = new HashMap<String, String>();
-		if(searchEmployeeWithName(name) || searchEmployeeWithId(id)){
-			searchResult.put("ID", util.doGetText(id_value));
-			searchResult.put("First name", util.doGetText(firstName_value));
-			searchResult.put("Last name", util.doGetText(lastName_value));
-		}	
-		System.out.println(searchResult);
-		return searchResult;
+
+	public String searchAnEmployee(String name) {
+		if(searchEmployeeWithName(name)) {
+			System.out.println("Employee id is :: "+util.doGetText(id_value));
+		}
+		return util.doGetText(id_value);
 	}
 	
-	public void deleteEmployee(String name) {
+	public boolean deleteAnEmployee(String name) throws InterruptedException {
 		if(searchEmployeeWithName(name)) {
 			util.doClick(checkBox);
 			util.doClick(deleteBtn);
-			util.doClick(deleteOkBtn);
+		    util.doClick(deleteOkBtn);
+		    System.out.println("Employee deleted successfully.."+name);
 		}
+		return searchWhenEmployeeNotAvailable(name);
+	}
+
+	public PersonalDetailsPage navigateToPersonalDetailsPage() {
+		util.doClick(firstName_value);
+		return new PersonalDetailsPage(driver);
 	}
 	
 }

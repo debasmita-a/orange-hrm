@@ -15,26 +15,24 @@ public class EmployeeListPageTest extends BaseTest {
 		employeeListPage = dashboardPage.navigateToEmployeeList();
 		return employeeListPage;
 	}
-	
+
 	@Test
-	public void searchEmployeeWithNameTest() {
-		Assert.assertEquals(employeeListPage.searchEmployeeWithName("FirstName_01"), false);
+	public void searchEmployeeWithNameTest() throws InterruptedException {
+		Assert.assertTrue(employeeListPage.searchEmployeeWithName("joey"));
 	}
 	
 	@Test
-	public void searchEmployeeWithIdTest() {
-		Assert.assertEquals(employeeListPage.searchEmployeeWithId("0001"), true);
+	public void searchWhenEmployeeNotAvailableTest() throws InterruptedException {
+		Assert.assertTrue(employeeListPage.searchWhenEmployeeNotAvailable("test01"));
 	}
 	
 	@Test
 	public void searchResultTest(){
-		String emp_last_name = employeeListPage.searchResult("FirstName_01", " ").get("Last name");
-		Assert.assertEquals(emp_last_name, "LastName_01");
+		Assert.assertEquals(employeeListPage.searchAnEmployee("debasmita"),"0001");
 	}
 	
 	@Test
-	public void deleteEmployeeTest(){
-		employeeListPage.deleteEmployee("FirstName_01");
-		Assert.assertEquals(employeeListPage.searchEmployeeWithName("FirstName_01"), false);
+	public void deleteEmployeeTest() throws InterruptedException{
+		Assert.assertTrue(employeeListPage.deleteAnEmployee("test01"));
 	}
 }

@@ -18,7 +18,7 @@ public class AddEmployeePageTest extends BaseTest{
 	}
 	@Test
 	public void addEmployeeTest() {
-		personalDetailsPage = addEmployeePage.addAnEmployee("Joey", "Tribianni", "0003");
+		personalDetailsPage = addEmployeePage.addAnEmployee("Joey", "Tribianni");
 		String actualProfileName = personalDetailsPage.getProfileName();
 		Assert.assertEquals(actualProfileName, "Joey Tribianni");
 		
