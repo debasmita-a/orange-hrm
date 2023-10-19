@@ -19,10 +19,10 @@ public class LoginPage {
 		util = new ElementUtil(driver);
 	}
 	
-	public DashboardPage doLogin(String user_name, String pass) {
+	public EmployeeListPage doLogin(String user_name, String pass) {
 		util.doSendKeys(username, user_name);
 		util.doSendKeys(password, pass);
 		util.doClick(loginBtn);
-		return new DashboardPage(driver);
+		return new EmployeeListPage(driver);
 	}
 }

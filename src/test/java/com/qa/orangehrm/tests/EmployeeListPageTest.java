@@ -1,43 +1,33 @@
 package com.qa.orangehrm.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.qa.orangehrm.base.BaseTest;
 import com.qa.orangehrm.pages.EmployeeListPage;
+import com.qa.orangehrm.pages.PersonalDetails;
 
-public class EmployeeListPageTest extends BaseTest {
-	
+public class EmployeeListPageTest extends BaseTest{
+
 	@BeforeClass
-	public EmployeeListPage employeeListPageSetUp() {
-		dashboardPage = loginPage.doLogin(prop.getProperty("username"), prop.getProperty("password"));
-		employeeListPage = dashboardPage.navigateToEmployeeList();
+	public EmployeeListPage setupEmployeeListPage() {
+		employeeListPage = loginPage.doLogin(prop.getProperty("username"), prop.getProperty("password"));
 		return employeeListPage;
 	}
-
-	@Test
-	public void searchEmployeeWithNameTest(){
-		Assert.assertTrue(employeeListPage.searchEmployeeWithName("joey"));
+	
+	@DataProvider
+	public Object[][] addEmployeeTestData() {
+		return new Object[][] {
+			{"Marchese", "Pooby"},
+			{"Marchesa", "Cooco"}
+		};
 	}
 	
-	@Test
-	public void searchWhenEmployeeNotAvailableTest(){
-		Assert.assertTrue(employeeListPage.searchWhenEmployeeNotAvailable("test01"));
+	@Test(dataProvider="addEmployeeTestData")
+	public void addEmployeeTest(String fn, String ln) {
+		PersonalDetails personalDetails = new PersonalDetails(fn,ln);
+		employeeListPage.addEmployee(personalDetails);
 	}
 	
-	@Test
-	public void searchResultTest(){
-		Assert.assertEquals(employeeListPage.searchResult("debasmita"),"0001");
-	}
-	
-	@Test
-	public void deleteEmployeeTest(){
-		Assert.assertTrue(employeeListPage.deleteAnEmployee("test01"));
-	}
-	
-	@Test
-	public void editEmployeeProfileTest() {
-		Assert.assertTrue(employeeListPage.editEmployeeProfile("debasmita"));
-	}
 }
