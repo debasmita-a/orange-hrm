@@ -33,6 +33,7 @@ public class ElementUtil {
 	}
 	
 	public void doSendKeys(By locator, String value) {
+		getElement(locator).clear();
 		getElement(locator).sendKeys(value);
 	}
 	
@@ -42,6 +43,7 @@ public class ElementUtil {
 	
 	public void doActionsSendkeys(By locator, String keys) {
 		Actions action = new Actions(driver);
+		getElement(locator).clear();
 		action.sendKeys(getElement(locator), keys).build().perform();
 	}
 	
@@ -108,6 +110,7 @@ public class ElementUtil {
 	
 	public void doActionsSendKeysWithWait(By locator, String value, int timeout) {
 		Actions action = new Actions(driver);
+		getElement(locator).clear();
 		action.sendKeys(waitForElementPresence(locator,timeout), value).build().perform();
 	}
 	

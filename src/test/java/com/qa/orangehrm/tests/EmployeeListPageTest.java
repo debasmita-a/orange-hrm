@@ -1,5 +1,6 @@
 package com.qa.orangehrm.tests;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -28,6 +29,18 @@ public class EmployeeListPageTest extends BaseTest{
 	public void addEmployeeTest(String fn, String ln) {
 		PersonalDetails personalDetails = new PersonalDetails(fn,ln);
 		employeeListPage.addEmployee(personalDetails);
+	}
+	
+	@DataProvider
+	public Object[][] searchEmployeeTestData() {
+		return new Object[][] {
+			{"Marchese"},
+			{"Marchesa"}
+		};
+	}
+	@Test(dataProvider="searchEmployeeTestData")
+	public void searchEmployeeTest(String name) {
+		
 	}
 	
 }
