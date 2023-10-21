@@ -20,8 +20,8 @@ public class EmployeeListPageTest extends BaseTest{
 	@DataProvider
 	public Object[][] addEmployeeTestData() {
 		return new Object[][] {
-			{"April", "april"},
-			{"May", "may"}
+			{"April", "test"},
+			{"May", "test"}
 		};
 	}
 	
@@ -46,7 +46,7 @@ public class EmployeeListPageTest extends BaseTest{
 	
 	@Test
 	public void updateEmployeeTest() {
-		PersonalDetails personalDetails = new PersonalDetails("Sept", "sept","","","","");
+		PersonalDetails personalDetails = new PersonalDetails("Oct_testlast", "final","","","","");
 		String emp_id =employeeListPage.addEmployee(personalDetails);
 		personalDetails.setGender("Female");
 		personalDetails.setMaritalStatus("Other");

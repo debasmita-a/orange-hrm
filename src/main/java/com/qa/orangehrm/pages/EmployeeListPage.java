@@ -25,6 +25,8 @@ public class EmployeeListPage {
 	
 	private By fname = By.id("firstName");
 	private By lname = By.id("lastName");
+	private By fname_edit = By.id("personal_txtEmpFirstName");
+	private By lname_edit = By.id("personal_txtEmpLastName");
 	private By id = By.id("personal_txtEmployeeId");
 	private By license_exp_date = By.id("personal_txtLicExpDate");
 	private By gender_male = By.id("personal_optGender_1");
@@ -53,8 +55,8 @@ public class EmployeeListPage {
 	}
 	
 	public void fillPersonalDetails(PersonalDetails personalDetails) {
-		util.doSendKeys(fname,personalDetails.getFirstName());
-		util.doSendKeys(lname,personalDetails.getLastName());
+		util.doSendKeys(fname_edit,personalDetails.getFirstName());
+		util.doSendKeys(lname_edit,personalDetails.getLastName());
 		
 		if(personalDetails.getGender().equals("Male")) {
 			util.doClick(gender_male);
@@ -98,15 +100,19 @@ public class EmployeeListPage {
 	}
 	
 	public boolean updateEmployee(PersonalDetails personalDetails, String emp_id) {
-		clickOnEmployeeListLink();
-		util.doActionsSendKeysWithWait(empId_search, emp_id, 5000);
+		/*
+		 * clickOnEmployeeListLink(); util.doActionsSendKeysWithWait(empId_search,
+		 * emp_id, 5000); String empTableSearchResult = "//td/a[text()='"+emp_id+"']";
+		 * util.doClickWithWait(By.xpath(empTableSearchResult),5000);
+		 */
+		searchEmployee(emp_id);
 		String empTableSearchResult = "//td/a[text()='"+emp_id+"']";
 		util.doClickWithWait(By.xpath(empTableSearchResult),5000);
 		util.doClickWithWait(editBtn,5000);
 		fillPersonalDetails(personalDetails);
 		util.doClickWithWait(saveBtn,5000);
 		if(util.doGetElements(disabled_elements_edit).size()>0) {
-			System.out.println("Employee edited successfully..");
+			System.out.println("Employee edited successfully..no.disabled ele.."+util.doGetElements(disabled_elements_edit).size());
 			return true;
 		}else {
 			System.out.println("Not edited successfully..");
