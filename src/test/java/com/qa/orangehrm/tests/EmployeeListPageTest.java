@@ -54,4 +54,11 @@ public class EmployeeListPageTest extends BaseTest{
 		employeeListPage.updateEmployee(personalDetails, emp_id);	
 	}
 	
+	@Test
+	public void deleteEmployeeTest() {
+		PersonalDetails personalDetails = new PersonalDetails("test", "test_del","","","","");
+		String emp_id =employeeListPage.addEmployee(personalDetails);
+		employeeListPage.deleteEmployee(emp_id);
+	}
+	
 }

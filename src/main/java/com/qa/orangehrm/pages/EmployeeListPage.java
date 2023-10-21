@@ -116,11 +116,12 @@ public class EmployeeListPage {
 	
 	public String deleteEmployee(String emp_id) {
 		clickOnEmployeeListLink();
-		util.doActionsSendKeysWithWait(empId_search, emp_id, 5000);
+		searchEmployee(emp_id);
 		util.doClickWithWait(fname_search_checkbox, 5000);
-		util.doClick(deleteBtn);
-		util.doClick(deleteDialog_Ok_Btn);
+		util.doClickWithWait(deleteBtn,5000);
+		util.doClickWithWait(deleteDialog_Ok_Btn,5000);		
 		String no_rec_found_msg = util.doGetText(noRecodFound_msg);
+		System.out.println("Deleted employee.."+emp_id+"  "+no_rec_found_msg);
 		return no_rec_found_msg;
 	}
 
