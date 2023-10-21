@@ -24,8 +24,8 @@ public class DashboardPage {
 	}
 	
 	public AddEmployeePage navigateToAddEmployee() {
-		util.getElement(pim);
-		util.doClick(addEmployee);
+		util.doClick(pim);
+		util.getElement(addEmployee);
 		return new AddEmployeePage(driver);
 	}
 	

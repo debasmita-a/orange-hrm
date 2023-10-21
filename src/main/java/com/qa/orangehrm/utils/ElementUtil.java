@@ -3,6 +3,7 @@ package com.qa.orangehrm.utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 public class ElementUtil {
 
@@ -26,5 +27,10 @@ public class ElementUtil {
 	
 	public String doGetText(By locator) {
 		return getElement(locator).getText();
+	}
+	
+	public void doMoveToElement(By locator) {
+		Actions action = new Actions(driver);
+		action.moveToElement(getElement(locator)).build().perform();
 	}
 }
