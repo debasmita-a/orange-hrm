@@ -8,12 +8,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-<<<<<<< HEAD
-=======
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
->>>>>>> 44e3470ea776e8c08cb1cdb72e3609324bf9de1d
+
 
 public class ElementUtil {
 
@@ -43,9 +42,7 @@ public class ElementUtil {
 	public String doGetText(By locator) {
 		return getElement(locator).getText();
 	}
-	
-<<<<<<< HEAD
-=======
+
 	public void doActionsSendkeys(By locator, String keys) {
 		Actions action = new Actions(driver);
 		getElement(locator).clear();
@@ -56,15 +53,12 @@ public class ElementUtil {
 		Actions action = new Actions(driver);
 		action.click(getElement(locator)).build().perform();
 	}
-	
->>>>>>> 44e3470ea776e8c08cb1cdb72e3609324bf9de1d
+
 	public void doMoveToElement(By locator) {
 		Actions action = new Actions(driver);
 		action.moveToElement(getElement(locator)).build().perform();
 	}
-<<<<<<< HEAD
-=======
-	
+
 	public void doAcceptAlert() {
 		Alert alert = driver.switchTo().alert();
 		alert.accept();	
@@ -129,5 +123,5 @@ public class ElementUtil {
 	}
 	
 	//**************************************************************************************************************************//
->>>>>>> 44e3470ea776e8c08cb1cdb72e3609324bf9de1d
+
 }
