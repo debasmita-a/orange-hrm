@@ -12,11 +12,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class DriverFactory {
 
-	private WebDriver driver;
-	private Properties prop;
+	public WebDriver driver;
+	public Properties prop;
+	public static String highlight;
+	
 	
 	public WebDriver initDriver(Properties prop) {
-	
+		highlight = prop.getProperty("highlight").trim();
 		switch(prop.getProperty("browser").toLowerCase().trim()) {
 		
 		case "chrome" :
