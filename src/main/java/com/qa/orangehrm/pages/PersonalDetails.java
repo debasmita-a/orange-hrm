@@ -11,7 +11,7 @@ public class PersonalDetails {
 	private String dob;
 	
 	
-	public PersonalDetails(String firstName, String lastName, String empId, String gender, String maritalStatus,
+	public PersonalDetails(String firstName, String lastName, String gender, String maritalStatus,
 			String nationality, String dob) {
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -21,6 +21,7 @@ public class PersonalDetails {
 		this.nationality = nationality;
 		this.dob = dob;
 	}
+	
 	public PersonalDetails(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -38,12 +39,15 @@ public class PersonalDetails {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public String getEmpId() {
-		return empId;
+
+	public String getEmpId(){ 
+		  return empId;
+	 } 
+	
+	 public void setEmpId(String empId) { 
+		 this.empId = empId; 
 	}
-	public void setEmpId(String empId) {
-		this.empId = empId;
-	}
+	 
 	public String getGender() {
 		return gender;
 	}

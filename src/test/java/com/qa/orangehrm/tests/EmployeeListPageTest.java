@@ -20,8 +20,8 @@ public class EmployeeListPageTest extends BaseTest{
 	@DataProvider
 	public Object[][] addEmployeeTestData() {
 		return new Object[][] {
-			{"Marchese", "Pooby"},
-			{"Marchesa", "Cooco"}
+			{"April", "april"},
+			{"May", "may"}
 		};
 	}
 	
@@ -38,9 +38,20 @@ public class EmployeeListPageTest extends BaseTest{
 			{"Marchesa"}
 		};
 	}
+	
 	@Test(dataProvider="searchEmployeeTestData")
 	public void searchEmployeeTest(String name) {
 		
+	}
+	
+	@Test
+	public void updateEmployeeTest() {
+		PersonalDetails personalDetails = new PersonalDetails("Sept", "sept","","","","");
+		String emp_id =employeeListPage.addEmployee(personalDetails);
+		personalDetails.setGender("Female");
+		personalDetails.setMaritalStatus("Other");
+		personalDetails.setNationality("Spanish");
+		employeeListPage.updateEmployee(personalDetails, emp_id);	
 	}
 	
 }

@@ -78,6 +78,10 @@ public class ElementUtil {
 		driver.switchTo().window(windowID);
 	}
 	
+	public String doGetAttributeValue(By locator, String attributeName) {
+		return getElement(locator).getAttribute(attributeName);
+	}
+	
 	public void selectByVisibleText(By locator, String text) {
 		Select select = new Select(getElement(locator));
 		select.selectByVisibleText(text);
@@ -122,6 +126,10 @@ public class ElementUtil {
 		alert.accept();
 	}
 	
+	public void doClickWithWait(By locator, int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofMillis(timeout));
+		wait.until(ExpectedConditions.presenceOfElementLocated(locator)).click();
+	}
 	//**************************************************************************************************************************//
 
 }

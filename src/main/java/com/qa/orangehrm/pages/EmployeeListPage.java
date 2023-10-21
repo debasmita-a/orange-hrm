@@ -1,8 +1,8 @@
 package com.qa.orangehrm.pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Select;
 
 import com.qa.orangehrm.utils.ElementUtil;
 
@@ -10,7 +10,7 @@ public class EmployeeListPage {
 
 	private WebDriver driver;
 	private ElementUtil util;
-	
+
 	private By pim_menu = By.id("menu_pim_viewPimModule");
 	private By employeeListLink = By.linkText("Employee List");
 	
@@ -18,17 +18,24 @@ public class EmployeeListPage {
 	private By searchBtn = By.id("searchBtn");
 	private By editBtn = By.id("btnSave");
 	private By saveBtn = By.id("btnSave");
+	private By deleteBtn = By.id("btnDelete");
+	private By fname_search_checkbox = By.xpath("//td/input[@type='checkbox']");
+	private By deleteDialog_Ok_Btn = By.id("dialogDeleteBtn");
+	private By noRecodFound_msg = By.xpath("//table//td");
 	
 	private By fname = By.id("firstName");
 	private By lname = By.id("lastName");
 	private By id = By.id("personal_txtEmployeeId");
 	private By license_exp_date = By.id("personal_txtLicExpDate");
-	private By gender = By.id("personal_optGender_1");
+	private By gender_male = By.id("personal_optGender_1");
+	private By gender_female = By.id("personal_optGender_2");
 	private By marital_status = By.id("personal_cmbMarital");
 	private By nationality = By.id("personal_cmbNation");
 	private By dob = By.id("personal_DOB");
-	private By successMsg = By.xpath("//div[@class='inner' ]/script[@type='text/javascript']");
+	private By empId = By.id("employeeId");
 	
+	private By disabled_elements_edit = By.xpath("//input[@disabled='disabled']");
+	private By empId_search = By.id("empsearch_id");
 	private By empName_search = By.id("empsearch_employee_name_empName");
 	private By emp_table_links = By.xpath("//td/a");
 	private By emp_table_fname = By.xpath("(//td/a)[2]");
@@ -46,12 +53,17 @@ public class EmployeeListPage {
 	}
 	
 	public void fillPersonalDetails(PersonalDetails personalDetails) {
-		util.getElement(fname).sendKeys(personalDetails.getFirstName());
-		util.getElement(lname).sendKeys(personalDetails.getLastName());
-		util.getElement(id).sendKeys(personalDetails.getEmpId());
-		util.getElement(gender).sendKeys(personalDetails.getGender());
-		util.getElement(marital_status).sendKeys(personalDetails.getMaritalStatus());
-		util.getElement(nationality).sendKeys(personalDetails.getNationality());
+		util.doSendKeys(fname,personalDetails.getFirstName());
+		util.doSendKeys(lname,personalDetails.getLastName());
+		
+		if(personalDetails.getGender().equals("Male")) {
+			util.doClick(gender_male);
+		}else {
+			util.doClick(gender_female);
+		}
+		
+		util.selectByVisibleText(marital_status,personalDetails.getMaritalStatus());
+		util.selectByVisibleText(nationality,personalDetails.getNationality());		
 		util.getElement(dob).sendKeys(personalDetails.getDob());
 	}
 	
@@ -60,21 +72,56 @@ public class EmployeeListPage {
 		util.doClick(addEmpBtn);
 		util.doActionsSendkeys(fname, personalDetails.getFirstName());
 		util.doActionsSendkeys(lname, personalDetails.getLastName());
+		String employeeId = util.doGetAttributeValue(empId, "value");
 		util.doClick(saveBtn);
-		String empName = util.doGetText(profileName);
-		System.out.println("Employee added :: "+empName);
-		clickOnEmployeeListLink();
-		return empName;
+		return searchEmployee(employeeId);
+		/*
+		 * clickOnEmployeeListLink(); util.doActionsSendKeysWithWait(empId_search,
+		 * employeeId, 5000); util.doClick(searchBtn); String empTableSearchResult =
+		 * "//td/a[text()='"+employeeId+"']";
+		 * if(util.doGetElements(By.xpath(empTableSearchResult)).size()>0) {
+		 * System.out.println("Employee added.."+employeeId); return true; } return
+		 * false;
+		 */
 	}
 	
-	public void searchEmployee(String fName) {
+	public String searchEmployee(String emp_id) {
 		clickOnEmployeeListLink();
-		
-		
+		util.doActionsSendKeysWithWait(empId_search, emp_id, 5000);
+		util.doClick(searchBtn);
+		String empTableSearchResult = "//td/a[text()='"+emp_id+"']";
+		if(util.doGetElements(By.xpath(empTableSearchResult)).size()>0) {
+			System.out.println("Employee available.."+emp_id);
+			return emp_id;
+		}
+		return null;	
 	}
 	
-	public void updateEmployee(PersonalDetails personalDetails, String fName) {
-		
+	public boolean updateEmployee(PersonalDetails personalDetails, String emp_id) {
+		clickOnEmployeeListLink();
+		util.doActionsSendKeysWithWait(empId_search, emp_id, 5000);
+		String empTableSearchResult = "//td/a[text()='"+emp_id+"']";
+		util.doClickWithWait(By.xpath(empTableSearchResult),5000);
+		util.doClickWithWait(editBtn,5000);
+		fillPersonalDetails(personalDetails);
+		util.doClickWithWait(saveBtn,5000);
+		if(util.doGetElements(disabled_elements_edit).size()>0) {
+			System.out.println("Employee edited successfully..");
+			return true;
+		}else {
+			System.out.println("Not edited successfully..");
+			return false;
+		}
+	}
+	
+	public String deleteEmployee(String emp_id) {
+		clickOnEmployeeListLink();
+		util.doActionsSendKeysWithWait(empId_search, emp_id, 5000);
+		util.doClickWithWait(fname_search_checkbox, 5000);
+		util.doClick(deleteBtn);
+		util.doClick(deleteDialog_Ok_Btn);
+		String no_rec_found_msg = util.doGetText(noRecodFound_msg);
+		return no_rec_found_msg;
 	}
 
 }
