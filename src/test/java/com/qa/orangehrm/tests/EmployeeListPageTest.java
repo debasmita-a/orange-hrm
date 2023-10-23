@@ -44,13 +44,25 @@ public class EmployeeListPageTest extends BaseTest{
 		
 	}
 	
-	@Test
-	public void updateEmployeeTest() {
-		PersonalDetails personalDetails = new PersonalDetails("Oct_testlast", "final","","","","");
+	@DataProvider
+	public Object[][] updateEmployeeTestData() {
+		return new Object[][] {
+			{"Joey", "Tribianni","","","","","Italian","Male","Unmarried"},
+			{"Rachel", "Green","","","","","Albanian","Female","Married"},
+			{"Ross", "Geller","","","","","Danish","Male","Unmarried"},
+			{"Phoebe", "Buffay","","","","","Indian","Female","Unmarried"},
+			{"Monica", "Geller","","","","","German","Female","Married"},
+			{"Chandler", "Bing","","","","","Spanish","Male","Married"},
+		};
+	}
+	@Test(dataProvider="updateEmployeeTestData")
+	public void updateEmployeeTest(String fn, String ln, String gender, String maritalStatus, String nationality, String dob, 
+			String setNationality, String setGender, String setMaritalStatus) {
+		PersonalDetails personalDetails = new PersonalDetails(fn,ln,gender,maritalStatus,nationality,dob);
 		String emp_id =employeeListPage.addEmployee(personalDetails);
-		personalDetails.setGender("Female");
-		personalDetails.setMaritalStatus("Other");
-		personalDetails.setNationality("Spanish");
+		personalDetails.setGender(setGender);
+		personalDetails.setMaritalStatus(setMaritalStatus);
+		personalDetails.setNationality(setNationality);
 		employeeListPage.updateEmployee(personalDetails, emp_id);	
 	}
 	

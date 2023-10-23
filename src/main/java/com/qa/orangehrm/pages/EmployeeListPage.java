@@ -10,53 +10,52 @@ public class EmployeeListPage {
 
 	private WebDriver driver;
 	private ElementUtil util;
-
-	private By pim_menu = By.id("menu_pim_viewPimModule");
+	
+    //main menu link elements::
+	private By pim_menu = By.xpath("//a[contains(@href,'/pim/viewPimModule')]");
 	private By employeeListLink = By.linkText("Employee List");
+	//form button elements::
+	private By addEmpBtn = By.xpath("//button[text()=' Add ']");
+	private By searchBtn = By.xpath("//button[text()=' Search ']");
+	private By saveBtn = By.xpath("//button[text()=' Save ']");
+	private By editBtn = By.xpath("//i[contains(@class,'bi-pencil-fill')]");
+	private By deleteBtn1 = By.xpath("//i[contains(@class,'bi-trash')]");
+	private By deleteBtn2 = By.xpath("//button[text()=' Delete Selected ']");
+	private By deleteDialog_Ok_Btn = By.xpath("//button[text()=' Yes, Delete ']");
+	private By toasterMsg = By.xpath("//div[@id='oxd-toaster_1']");
+	//employee edit form elements::
+	private By fname = By.xpath("//input[contains(@class,'orangehrm-firstname')]");
+	private By lname = By.xpath("//input[contains(@class,'orangehrm-lastname')]");
+	private By employeeId = By.xpath("//label[@class='oxd-label']/parent::div/following-sibling::div/input");
+	private By gender_male = By.xpath("//input[@value='1']");
+	private By gender_female = By.xpath("//input[@value='2']");
+	private By maritalStatus = By.xpath("(//div[contains(@class,'oxd-select-text-input')])[2]");
+	private By nationality = By.xpath("(//div[contains(@class,'oxd-select-text-input')])[1]");
+	private By dob = By.xpath("//label[text()='Date of Birth']/parent::div/following-sibling::div//input[@placeholder='yyyy-mm-dd']");
+	//employee table cell values::
+	private By checkbox = By.xpath("(//div[@role='cell'])[1]//input[@type='checkbox']");
+	private By id = By.xpath("(//div[@role='cell'])[2]");
+	private By firstName = By.xpath("(//div[@role='cell'])[3]");
+	private By lastName = By.xpath("(//div[@role='cell'])[4]");
+	private By emp_table_links = By.xpath("//div[@role='cell']");
 	
-	private By addEmpBtn = By.id("btnAdd");
-	private By searchBtn = By.id("searchBtn");
-	private By editBtn = By.id("btnSave");
-	private By saveBtn = By.id("btnSave");
-	private By deleteBtn = By.id("btnDelete");
-	private By fname_search_checkbox = By.xpath("//td/input[@type='checkbox']");
-	private By deleteDialog_Ok_Btn = By.id("dialogDeleteBtn");
-	private By noRecodFound_msg = By.xpath("//table//td");
+	private By profileName = By.xpath("//div[@class='orangehrm-edit-employee-name']//h6");
+		
+	//page actions::
 	
-	private By fname = By.id("firstName");
-	private By lname = By.id("lastName");
-	private By fname_edit = By.id("personal_txtEmpFirstName");
-	private By lname_edit = By.id("personal_txtEmpLastName");
-	private By id = By.id("personal_txtEmployeeId");
-	private By license_exp_date = By.id("personal_txtLicExpDate");
-	private By gender_male = By.id("personal_optGender_1");
-	private By gender_female = By.id("personal_optGender_2");
-	private By marital_status = By.id("personal_cmbMarital");
-	private By nationality = By.id("personal_cmbNation");
-	private By dob = By.id("personal_DOB");
-	private By empId = By.id("employeeId");
-	
-	private By disabled_elements_edit = By.xpath("//input[@disabled='disabled']");
-	private By empId_search = By.id("empsearch_id");
-	private By empName_search = By.id("empsearch_employee_name_empName");
-	private By emp_table_links = By.xpath("//td/a");
-	private By emp_table_fname = By.xpath("(//td/a)[2]");
-	
-	private By profileName = By.xpath("//div[@id='profile-pic']/h1");
-			
 	public EmployeeListPage(WebDriver driver) {
 		this.driver = driver;
 		util = new ElementUtil(driver);
 	}
 	
 	public void clickOnEmployeeListLink() {
-		util.doMoveToElementWithWait(pim_menu, 5000);
-		util.doActionsClickWithWait(employeeListLink, 5000);
+		util.doClick(pim_menu);
+		util.doClick(employeeListLink);
 	}
 	
 	public void fillPersonalDetails(PersonalDetails personalDetails) {
-		util.doSendKeys(fname_edit,personalDetails.getFirstName());
-		util.doSendKeys(lname_edit,personalDetails.getLastName());
+		util.doSendKeys(fname,personalDetails.getFirstName());
+		util.doSendKeys(lname,personalDetails.getLastName());
 		
 		if(personalDetails.getGender().equals("Male")) {
 			util.doClick(gender_male);
@@ -64,7 +63,7 @@ public class EmployeeListPage {
 			util.doClick(gender_female);
 		}
 		
-		util.selectByVisibleText(marital_status,personalDetails.getMaritalStatus());
+		util.selectByVisibleText(maritalStatus,personalDetails.getMaritalStatus());
 		util.selectByVisibleText(nationality,personalDetails.getNationality());		
 		util.getElement(dob).sendKeys(personalDetails.getDob());
 	}
@@ -74,61 +73,41 @@ public class EmployeeListPage {
 		util.doClick(addEmpBtn);
 		util.doActionsSendkeys(fname, personalDetails.getFirstName());
 		util.doActionsSendkeys(lname, personalDetails.getLastName());
-		String employeeId = util.doGetAttributeValue(empId, "value");
+		String id = util.doGetText(employeeId);
 		util.doClick(saveBtn);
-		return searchEmployee(employeeId);
-		/*
-		 * clickOnEmployeeListLink(); util.doActionsSendKeysWithWait(empId_search,
-		 * employeeId, 5000); util.doClick(searchBtn); String empTableSearchResult =
-		 * "//td/a[text()='"+employeeId+"']";
-		 * if(util.doGetElements(By.xpath(empTableSearchResult)).size()>0) {
-		 * System.out.println("Employee added.."+employeeId); return true; } return
-		 * false;
-		 */
+		String successMsg = util.doGetText(toasterMsg);
+		System.out.println(successMsg);
+		String name = util.doGetText(profileName);
+		System.out.println("Employee added.."+name);
+		return id;
 	}
 	
-	public String searchEmployee(String emp_id) {
+	public boolean searchEmployee(String emp_id) {
 		clickOnEmployeeListLink();
-		util.doActionsSendKeysWithWait(empId_search, emp_id, 5000);
+		util.doActionsSendKeysWithWait(employeeId, emp_id, 5000);
 		util.doClick(searchBtn);
-		String empTableSearchResult = "//td/a[text()='"+emp_id+"']";
-		if(util.doGetElements(By.xpath(empTableSearchResult)).size()>0) {
-			System.out.println("Employee available.."+emp_id);
-			return emp_id;
-		}
-		return null;	
+	    if(util.doGetText(id).equals(emp_id)) {
+	    	return true;
+	    }
+	    return false;
 	}
 	
-	public boolean updateEmployee(PersonalDetails personalDetails, String emp_id) {
-		/*
-		 * clickOnEmployeeListLink(); util.doActionsSendKeysWithWait(empId_search,
-		 * emp_id, 5000); String empTableSearchResult = "//td/a[text()='"+emp_id+"']";
-		 * util.doClickWithWait(By.xpath(empTableSearchResult),5000);
-		 */
+	public void updateEmployee(PersonalDetails personalDetails, String emp_id) {
 		searchEmployee(emp_id);
-		String empTableSearchResult = "//td/a[text()='"+emp_id+"']";
-		util.doClickWithWait(By.xpath(empTableSearchResult),5000);
 		util.doClickWithWait(editBtn,5000);
 		fillPersonalDetails(personalDetails);
 		util.doClickWithWait(saveBtn,5000);
-		if(util.doGetElements(disabled_elements_edit).size()>0) {
-			System.out.println("Employee edited successfully..no.disabled ele.."+util.doGetElements(disabled_elements_edit).size());
-			return true;
-		}else {
-			System.out.println("Not edited successfully..");
-			return false;
-		}
+		String successMsg = util.doGetText(toasterMsg);
+		System.out.println(successMsg);
 	}
 	
-	public String deleteEmployee(String emp_id) {
+	public void deleteEmployee(String emp_id) {
 		clickOnEmployeeListLink();
 		searchEmployee(emp_id);
-		util.doClickWithWait(fname_search_checkbox, 5000);
-		util.doClickWithWait(deleteBtn,5000);
+		util.doClickWithWait(deleteBtn1, 5000);
 		util.doClickWithWait(deleteDialog_Ok_Btn,5000);		
-		String no_rec_found_msg = util.doGetText(noRecodFound_msg);
-		System.out.println("Deleted employee.."+emp_id+"  "+no_rec_found_msg);
-		return no_rec_found_msg;
+		String successMsg = util.doGetText(toasterMsg);
+		System.out.println(successMsg);
 	}
 
 }
