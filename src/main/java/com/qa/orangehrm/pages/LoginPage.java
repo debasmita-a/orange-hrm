@@ -19,7 +19,7 @@ public class LoginPage {
 		util = new ElementUtil(driver);
 	}
 	
-	public EmployeeListPage doLogin(String user_name, String pass) {
+	public EmployeeListPage doLogin(String user_name, String pass){
 		util.doActionsSendKeysWithWait(username, user_name,5000);
 		util.doActionsSendKeysWithWait(password, user_name,5000);
 		util.doActionsClick(loginBtn);

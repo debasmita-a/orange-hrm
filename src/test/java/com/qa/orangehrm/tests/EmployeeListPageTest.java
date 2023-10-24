@@ -12,7 +12,7 @@ import com.qa.orangehrm.pages.PersonalDetails;
 public class EmployeeListPageTest extends BaseTest{
 
 	@BeforeClass
-	public EmployeeListPage setupEmployeeListPage() {
+	public EmployeeListPage setupEmployeeListPage(){
 		employeeListPage = loginPage.doLogin(prop.getProperty("username"), prop.getProperty("password"));
 		return employeeListPage;
 	}
