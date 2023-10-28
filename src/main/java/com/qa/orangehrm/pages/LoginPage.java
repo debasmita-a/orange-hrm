@@ -10,9 +10,9 @@ public class LoginPage {
 	private WebDriver driver;
 	private ElementUtil util;
 	
-	private By username = By.name("username");
+	private By username = By.xpath("//input[@name='username']");
 	private By password = By.name("password");
-	private By loginBtn = By.xpath("//button[type='submit']");
+	private By loginBtn = By.xpath("//button[@type='submit']");
 	
 	public LoginPage(WebDriver driver) {
 		this.driver = driver;
@@ -20,9 +20,9 @@ public class LoginPage {
 	}
 	
 	public EmployeeListPage doLogin(String user_name, String pass){
-		util.doActionsSendKeysWithWait(username, user_name,5000);
-		util.doActionsSendKeysWithWait(password, user_name,5000);
-		util.doActionsClick(loginBtn);
+			util.doSendKeysWithWait(username, user_name, 5000);
+			util.doSendKeysWithWait(password, pass,10000);
+			util.doClickWithWait(loginBtn, 5000);		
 		return new EmployeeListPage(driver);
 	}
 }

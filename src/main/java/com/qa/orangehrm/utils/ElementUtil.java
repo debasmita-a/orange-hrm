@@ -130,6 +130,24 @@ public class ElementUtil {
 		WebDriverWait wait = new WebDriverWait(driver,Duration.ofMillis(timeout));
 		wait.until(ExpectedConditions.presenceOfElementLocated(locator)).click();
 	}
+	
+	public void doSendKeysWithWait(By locator, String keys, int timeout) {
+		waitForElementPresence(locator, timeout).sendKeys(keys);
+		
+	}
+	
+	public void selectByVisibleTextWithWait(By locator, String text, int timeout) {
+		Select select = new Select(waitForElementPresence(locator,timeout));
+		select.selectByVisibleText(text);
+	}
+	
+	public String doGetTextWithWait(By locator, int timeout) {
+		return waitForElementPresence(locator,timeout).getText();
+	}
+	
+	public String doGetAttributeValueWithWait(By locator, String attributeName, int timeout) {
+		return waitForElementPresence(locator,timeout).getAttribute(attributeName);
+	}
 	//**************************************************************************************************************************//
 
 }

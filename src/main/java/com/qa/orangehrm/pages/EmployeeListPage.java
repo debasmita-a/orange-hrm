@@ -22,7 +22,7 @@ public class EmployeeListPage {
 	private By deleteBtn1 = By.xpath("//i[contains(@class,'bi-trash')]");
 	private By deleteBtn2 = By.xpath("//button[text()=' Delete Selected ']");
 	private By deleteDialog_Ok_Btn = By.xpath("//button[text()=' Yes, Delete ']");
-	private By toasterMsg = By.xpath("//div[@id='oxd-toaster_1']");
+	private By toasterMsg = By.id("oxd-toaster_1");
 	//employee edit form elements::
 	private By fname = By.xpath("//input[contains(@class,'orangehrm-firstname')]");
 	private By lname = By.xpath("//input[contains(@class,'orangehrm-lastname')]");
@@ -49,36 +49,35 @@ public class EmployeeListPage {
 	}
 	
 	public void clickOnEmployeeListLink() {
-		util.doClick(pim_menu);
-		util.doClick(employeeListLink);
+		util.doClickWithWait(pim_menu, 5000);
+		util.doClickWithWait(employeeListLink,5000);
 	}
 	
 	public void fillPersonalDetails(PersonalDetails personalDetails) {
-		util.doSendKeys(fname,personalDetails.getFirstName());
-		util.doSendKeys(lname,personalDetails.getLastName());
-		
+		util.doSendKeysWithWait(fname, personalDetails.getFirstName(), 5000);
+		util.doSendKeysWithWait(lname, personalDetails.getLastName(), 5000);	
 		if(personalDetails.getGender().equals("Male")) {
-			util.doClick(gender_male);
+			util.doClickWithWait(gender_male, 5000);
 		}else {
-			util.doClick(gender_female);
-		}
-		
-		util.selectByVisibleText(maritalStatus,personalDetails.getMaritalStatus());
-		util.selectByVisibleText(nationality,personalDetails.getNationality());		
-		util.getElement(dob).sendKeys(personalDetails.getDob());
+			util.doClickWithWait(gender_female, 5000);
+		}		
+		util.selectByVisibleTextWithWait(maritalStatus,personalDetails.getMaritalStatus(),5000);
+		util.selectByVisibleTextWithWait(nationality,personalDetails.getNationality(),5000);		
+		util.doSendKeysWithWait(dob, personalDetails.getDob(), 5000);
 	}
 	
-	public String addEmployee(PersonalDetails personalDetails) {
+	public String addEmployee(PersonalDetails personalDetails){
 		clickOnEmployeeListLink();
-		util.doClick(addEmpBtn);
-		util.doActionsSendkeys(fname, personalDetails.getFirstName());
-		util.doActionsSendkeys(lname, personalDetails.getLastName());
-		String id = util.doGetText(employeeId);
-		util.doClick(saveBtn);
-		String successMsg = util.doGetText(toasterMsg);
-		System.out.println(successMsg);
-		String name = util.doGetText(profileName);
+		util.doClickWithWait(addEmpBtn,5000);
+		util.doSendKeysWithWait(fname, personalDetails.getFirstName(),5000);
+		util.doSendKeysWithWait(lname, personalDetails.getLastName(),5000);
+		String id = util.doGetAttributeValueWithWait(employeeId,"value",5000);
+		util.doClickWithWait(saveBtn,5000);
+		String successMsg = util.doGetAttributeValueWithWait(toasterMsg,"value",5000);
+		System.out.println("Success msg.."+successMsg);
+		String name = util.doGetAttributeValueWithWait(profileName,"value",5000);
 		System.out.println("Employee added.."+name);
+		System.out.println("Employee added.."+id);
 		return id;
 	}
 	
