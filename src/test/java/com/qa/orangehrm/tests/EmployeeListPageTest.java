@@ -1,5 +1,7 @@
 package com.qa.orangehrm.tests;
 
+import java.util.List;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -20,57 +22,75 @@ public class EmployeeListPageTest extends BaseTest{
 	@DataProvider
 	public Object[][] addEmployeeTestData() {
 		return new Object[][] {
-			{"Nicaragua", "test"},
-			//{"May", "test"}
+			{"August", "Rush"},
+			{"Daisy", "Jones"},
+			{"Peter", "Parker"}
 		};
 	}
 	
 	@Test(dataProvider="addEmployeeTestData")
-	public void addEmployeeTest(String fn, String ln) throws InterruptedException{
+	public void addEmployeeTest(String fn, String ln){
 		PersonalDetails personalDetails = new PersonalDetails(fn,ln);
-		employeeListPage.addEmployee(personalDetails);
+		List<String> actualResult = employeeListPage.addEmployee(personalDetails);
+		String successMsg = actualResult.get(2);
+		Assert.assertTrue(successMsg.equals("Successfully Saved"));
 	}
 	
 	@DataProvider
 	public Object[][] searchEmployeeTestData() {
 		return new Object[][] {
-			{"Marchese"},
-			{"Marchesa"}
+			{"Juniper","Thorne"},
+			{"Nina", "Terrence"},
+			{"Kaz", "Nolan"}
 		};
 	}
 	
 	@Test(dataProvider="searchEmployeeTestData")
-	public void searchEmployeeTest(String name) {
-		
+	public void searchEmployeeTest(String fn, String ln){
+		PersonalDetails personalDetails = new PersonalDetails(fn,ln);
+		List<String> actualResult = employeeListPage.addEmployee(personalDetails);
+		boolean flag = employeeListPage.searchEmployee(actualResult.get(0));
+		Assert.assertTrue(flag);
 	}
 	
 	@DataProvider
 	public Object[][] updateEmployeeTestData() {
 		return new Object[][] {
-			//{"Joey", "Tribianni","","","","","Italian","Male","Single"},
-			//{"Rachel", "Green","","","","","Albanian","Female","Married"},
-		    //{"Ross", "Geller","","","","","Danish","Male","Single"},
-			//{"Phoebe", "Buffay","","","","","Indian","Female","Single"},
+			{"Joey", "Tribianni","","","","","Italian","Male","Single"},
+			{"Rachel", "Green","","","","","Albanian","Female","Married"},
+		    {"Ross", "Geller","","","","","Danish","Male","Single"},
+			{"Phoebe", "Buffay","","","","","Indian","Female","Single"},
 			{"Monica", "Geller","","","","","German","Female","Married"},
 			{"Chandler", "Bing","","","","","Spanish","Male","Married"}
 		};
 	}
 	@Test(dataProvider="updateEmployeeTestData")
 	public void updateEmployeeTest(String fn, String ln, String gender, String maritalStatus, String nationality, String dob, 
-			String setNationality, String setGender, String setMaritalStatus) throws InterruptedException{
+			String setNationality, String setGender, String setMaritalStatus){
 		PersonalDetails personalDetails = new PersonalDetails(fn,ln,gender,maritalStatus,nationality,dob);
 		employeeListPage.addEmployee(personalDetails);
 		personalDetails.setGender(setGender);
 		personalDetails.setMaritalStatus(setMaritalStatus);
 		personalDetails.setNationality(setNationality);
-		employeeListPage.updateEmployee(personalDetails);	
+		String successMsg = employeeListPage.updateEmployee(personalDetails);	
+		Assert.assertTrue(successMsg.equals("Successfully Updated"));
 	}
 	
-	@Test
-	public void deleteEmployeeTest() throws InterruptedException{
-		PersonalDetails personalDetails = new PersonalDetails("test", "test_del","","","","");
-		String emp_id =employeeListPage.addEmployee(personalDetails);
-		employeeListPage.deleteEmployee(emp_id);
+	@DataProvider
+	public Object[][] deleteEmployeeTestData() {
+		return new Object[][] {
+			{"Jake","Peralta"},
+			{"Amy", "Adams"},
+			{"Rosa", "Diaz"}
+		};
+	}
+	
+	@Test(dataProvider="deleteEmployeeTestData")
+	public void deleteEmployeeTest(String fn, String ln){
+		PersonalDetails personalDetails = new PersonalDetails(fn, ln);
+		List<String> actualResult = employeeListPage.addEmployee(personalDetails);
+		String successMsg = employeeListPage.deleteEmployee(actualResult.get(0));	
+		Assert.assertTrue(successMsg.equals("Successfully Deleted"));
 	}
 	
 }

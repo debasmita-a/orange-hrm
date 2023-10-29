@@ -1,5 +1,6 @@
 package com.qa.orangehrm.pages;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -21,8 +22,8 @@ public class EmployeeListPage {
 	private By addEmpBtn = By.xpath("//button[text()=' Add ']");
 	private By searchBtn = By.xpath("//button[text()=' Search ']");
 	private By saveBtn = By.xpath("//button[text()=' Save ']");
-	private By editBtn = By.xpath("//i[contains(@class,'bi-pencil-fill')]");
-	private By deleteBtn1 = By.xpath("//i[contains(@class,'bi-trash')]");
+	//private By editBtn = By.xpath("//i[contains(@class,'bi-pencil-fill')]");
+	//private By deleteBtn1 = By.xpath("//i[contains(@class,'bi-trash')]");
 	private By deleteBtn2 = By.xpath("//button[text()=' Delete Selected ']");
 	private By deleteDialog_Ok_Btn = By.xpath("//button[text()=' Yes, Delete ']");
 	
@@ -42,12 +43,9 @@ public class EmployeeListPage {
 	private By dob = By.xpath("//label[text()='Date of Birth']/parent::div/following-sibling::div//input[@placeholder='yyyy-mm-dd']");
 	//employee table cell values::
 	private By checkbox = By.xpath("(//div[@role='cell'])[1]//input[@type='checkbox']");
-	private By id = By.xpath("(//div[@role='cell'])[2]");
-	private By firstName = By.xpath("(//div[@role='cell'])[3]");
-	private By lastName = By.xpath("(//div[@role='cell'])[4]");
 	private By emp_table_links = By.xpath("//div[@role='cell']");
 	
-	private By profileName = By.xpath("//div[@class='orangehrm-edit-employee-name']//h6");
+	//private By profileName = By.xpath("//div[@class='orangehrm-edit-employee-name']//h6");
 		
 	//page actions::
 	
@@ -96,7 +94,7 @@ public class EmployeeListPage {
 		util.doSendKeysWithWait(dob, personalDetails.getDob(), FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
 	}
 	
-	public String addEmployee(PersonalDetails personalDetails) throws InterruptedException{
+	public List<String> addEmployee(PersonalDetails personalDetails){
 		clickOnEmployeeListLink();
 		util.doClickWithWait(addEmpBtn,FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
 		util.doSendKeysWithWait(fname, personalDetails.getFirstName(),FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
@@ -105,20 +103,28 @@ public class EmployeeListPage {
 		util.doClickWithWait(saveBtn,FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
 		String successMsg = util.doGetTextWithWait(toasterMsg_onAdd,FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
 		System.out.println("Success msg.."+successMsg);
-		Thread.sleep(5000);
-		String name = util.doGetAttributeValueWithWait(profileName,"textContent",FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
-		System.out.println("Employee added.."+name);
+		//Thread.sleep(5000);
+		//String name = util.doGetAttributeValueWithWait(profileName,"textContent",FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
+		//System.out.println("Employee added.."+name);
 		System.out.println("Employee added.."+id);
-		return successMsg;
+		
+		List<String> returnValues = new ArrayList<String>();
+		returnValues.add(id);
+		//returnValues.add(name);
+		returnValues.add(successMsg);
+		
+		return returnValues;
 	}
 	
 	public boolean searchEmployee(String emp_id) {
 		clickOnEmployeeListLink();
-		util.doActionsSendKeysWithWait(employeeId, emp_id, FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
-		util.doClick(searchBtn);
-	    if(util.doGetText(id).equals(emp_id)) {
+		util.doSendKeysWithWait(employeeId, emp_id, FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
+		util.doClickWithWait(searchBtn,FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
+	    if(util.waitForAllElementsPresence(emp_table_links, FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT).size()>0) {
+	    	System.out.println("Employee available..");
 	    	return true;
 	    }
+	    System.out.println("Employee not available..");
 	    return false;
 	}
 	
@@ -134,8 +140,10 @@ public class EmployeeListPage {
 	
 	public String deleteEmployee(String emp_id) {
 		clickOnEmployeeListLink();
-		searchEmployee(emp_id);
-		util.doClickWithWait(deleteBtn1, FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
+		util.doSendKeysWithWait(employeeId, emp_id, FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
+		util.doClickWithWait(searchBtn,FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
+		util.doActionsClickWithWait(checkbox, FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
+		util.doActionsClickWithWait(deleteBtn2, FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
 		util.doClickWithWait(deleteDialog_Ok_Btn,FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);		
 		String successMsg = util.doGetTextWithWait(toasterMsg_onDelete,FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
 		System.out.println(successMsg);
