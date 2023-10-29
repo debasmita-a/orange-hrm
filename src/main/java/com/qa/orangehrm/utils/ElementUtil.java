@@ -88,6 +88,10 @@ public class ElementUtil {
 	}
 	
 	//*********************************************************************** wait utils *****************//
+	public List<WebElement> waitForAllElementsPresence(By locator, int timeout){
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofMillis(timeout));
+		return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+	}
 	
 	public WebElement waitForElementPresence(By locator, int timeout) {
 		WebDriverWait wait = new WebDriverWait(driver,Duration.ofMillis(timeout));
@@ -127,11 +131,11 @@ public class ElementUtil {
 	}
 	
 	public void doClickWithWait(By locator, int timeout) {
-		WebDriverWait wait = new WebDriverWait(driver,Duration.ofMillis(timeout));
-		wait.until(ExpectedConditions.presenceOfElementLocated(locator)).click();
+		waitForElementPresence(locator, timeout).click();
 	}
 	
 	public void doSendKeysWithWait(By locator, String keys, int timeout) {
+		//getElement(locator).clear();
 		waitForElementPresence(locator, timeout).sendKeys(keys);
 		
 	}

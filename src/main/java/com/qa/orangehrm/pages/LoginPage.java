@@ -3,6 +3,7 @@ package com.qa.orangehrm.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import com.qa.orangehrm.constants.FrameworkConstants;
 import com.qa.orangehrm.utils.ElementUtil;
 
 public class LoginPage {
@@ -19,10 +20,10 @@ public class LoginPage {
 		util = new ElementUtil(driver);
 	}
 	
-	public EmployeeListPage doLogin(String user_name, String pass){
-			util.doSendKeysWithWait(username, user_name, 5000);
-			util.doSendKeysWithWait(password, pass,10000);
-			util.doClickWithWait(loginBtn, 5000);		
+	public EmployeeListPage doLogin(String userName, String pass){
+			util.doSendKeysWithWait(username, userName, FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
+			util.doSendKeysWithWait(password, pass,FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);
+			util.doClickWithWait(loginBtn, FrameworkConstants.DEFAULT_MEDIUM_TIMEOUT);		
 		return new EmployeeListPage(driver);
 	}
 }
