@@ -32,7 +32,7 @@ public class EmployeeListPageTest extends BaseTest{
 	public void addEmployeeTest(String fn, String ln){
 		PersonalDetails personalDetails = new PersonalDetails(fn,ln);
 		List<String> actualResult = employeeListPage.addEmployee(personalDetails);
-		String successMsg = actualResult.get(2);
+		String successMsg = actualResult.get(1);
 		Assert.assertTrue(successMsg.equals("Successfully Saved"));
 	}
 	
